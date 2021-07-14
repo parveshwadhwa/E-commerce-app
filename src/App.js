@@ -4,6 +4,7 @@ import HomePage from './pages/homepage/HomePage';
 import {Switch, Route} from 'react-router-dom';
 import ShopPage from './pages/shop/shop';
 import Header from './components/header/header.jsx';
+import SignInSignUpPage from './pages/signup-and-signin/signup-signin';
 
 const HatsPage = () => (
        <div>
@@ -20,6 +21,7 @@ function App() {
               <Switch>
               <Route exact path='/' component={HomePage} />
               <Route exact path='/shop' component={ShopPage} />
+              <Route exact path='/signin' component={SignInSignUpPage} />
               </Switch>
             </React.Fragment>
   );
