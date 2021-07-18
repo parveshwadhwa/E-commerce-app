@@ -42,8 +42,6 @@ class App extends React.Component {
               id: snapShot.id,
               ...snapShot.data()
             }
-          }, () => {
-            console.log(this.state); // we call console.log here bcz it is an async method
           });
           
         })

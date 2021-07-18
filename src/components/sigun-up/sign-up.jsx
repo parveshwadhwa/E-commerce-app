@@ -7,7 +7,7 @@ import { auth, CreateUserProfileDocument } from '../../firebase/firebase.utils';
 
 class SignUp extends React.Component 
 {
-    constructor()
+    constructor(props)
     {
         super(props);
         this.state = {
@@ -22,7 +22,33 @@ class SignUp extends React.Component
         event.preventDefault();
  
         const {displayName, email, password, confirmPassword} = this.state;
+        if(password !== confirmPassword)
+        {
+        alert("passwords dont match");
+        return;
+        }
 
+        try{
+                   const {user} = await auth.createUserWithEmailAndPassword(email,password);
+                   await CreateUserProfileDocument(user, {displayName});
+
+                   this.setState({
+                    displayName: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                   })
+        }catch(error)
+        {
+                console.log(error);
+        }
+
+
+    };
+
+    handleChange = event => {
+        const {name, value} = event.target;
+        this.setState({ [name]: value});
     }
 
     render()
