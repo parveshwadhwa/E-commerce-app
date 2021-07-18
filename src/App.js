@@ -30,8 +30,28 @@ class App extends React.Component {
 
   componentDidMount() 
   {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
-      CreateUserProfileDocument(user);
+    // here it is also a async bcz we are making a API request
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async UserAuth => {
+     
+      if(UserAuth)
+      {
+        const UserRef = await CreateUserProfileDocument(UserAuth);
+        UserRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          }, () => {
+            console.log(this.state); // we call console.log here bcz it is an async method
+          });
+          
+        })
+      }
+      else 
+      {
+        this.setState({currentUser: UserAuth});
+      }
     })
   }
 
