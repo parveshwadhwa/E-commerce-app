@@ -7,3 +7,8 @@ export const ShopDataSelector = createSelector(
     [shopselector],
     shopdata => shopdata.ShopData
 )
+
+export const selectCollection = collectionUrlParam => createSelector(
+    [ShopDataSelector],
+    collections => collections[collectionUrlParam]
+)

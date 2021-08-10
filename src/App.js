@@ -12,15 +12,6 @@ import { selectCurrentUser } from './redux/user/user-selectors';
 import { createStructuredSelector } from 'reselect';
 import CheckOutPage from './pages/checkout/checkout';
 
-
-const HatsPage = () => (
-       <div>
-         <h1>
-           HATS PAGE
-         </h1>
-       </div>
-);
-
 class App extends React.Component {
 
  
