@@ -46,6 +46,36 @@ const config = { // object for our project conaining all the details
 
   }
 
+  export const addCollectionAndDocuments = async (CollectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(CollectionKey);
+
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+      const newDocref = collectionRef.doc();
+      batch.set(newDocref, obj);
+    });
+
+    return await batch.commit();
+  }
+
+  export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map(doc => {
+      const {items, title} = doc.data();
+
+      return {
+        routeName: encodeURI(title.toLowerCase()), // it is a javascript method which takes and return string and it is used for Url's such that some url contains special symbols so it will convert them so as url can understand it  
+        id: doc.id,
+        title,
+        items
+      }
+    });
+
+    return transformedCollection.reduce((accumulator, collection) => {
+       accumulator[collection.title.toLowerCase()] = collection;
+       return accumulator;
+    }, {});
+  }
+
   firebase.initializeApp(config); // initalize our appz
 
   export const auth = firebase.auth(); // exporting an auth anywhere we need it
@@ -81,6 +111,12 @@ const config = { // object for our project conaining all the details
     /* We get a Document SnapShot object from our Document Reference object
        The DocumentSnapshot object allows us to check if a document exists at this query using the .exists property which returns a boolean
        We can also get the actual properties on the object by calling the .data() method, which returns us a JSON object of the document */
+
+
+    /******************************************Query SnapShot******************************** */
+    /* We get a querySnapshot object from our collectionReference object
+       We can check if there are any documents in the collection by calling the .empty property which returns a boolean
+       we can get all the documents in the collection by calling .docs property. It returns an array of our documents as QueryDocumentSnapshot objects */ 
 
        //**********************Query Practise************** */
 
