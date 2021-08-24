@@ -76,6 +76,15 @@ const config = { // object for our project conaining all the details
     }, {});
   }
 
+  export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+            const unsubscribe = auth.onAuthStateChanged(UserAuth => {
+              unsubscribe();
+              resolve(UserAuth);
+            }, reject)
+    })
+  }
+
   firebase.initializeApp(config); // initalize our appz
 
   export const auth = firebase.auth(); // exporting an auth anywhere we need it
