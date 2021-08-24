@@ -21,26 +21,26 @@ class App extends React.Component {
   {
     const {setCurrentUser} = this.props;
     // here it is also a async bcz we are making a API request
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async UserAuth => {
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async UserAuth => {
      
-      if(UserAuth)
-      {
-        const UserRef = await CreateUserProfileDocument(UserAuth);
-        UserRef.onSnapshot(snapShot => {
-          this.props.setCurrentUser({
+    //   if(UserAuth)
+    //   {
+    //     const UserRef = await CreateUserProfileDocument(UserAuth);
+    //     UserRef.onSnapshot(snapShot => {
+    //       this.props.setCurrentUser({
             
-              id: snapShot.id,
-              ...snapShot.data()
+    //           id: snapShot.id,
+    //           ...snapShot.data()
             
-          });
+    //       });
           
-        })
-      }
-      else 
-      {
-        setCurrentUser(UserAuth);
-      }
-    })
+    //     })
+    //   }
+    //   else 
+    //   {
+    //     setCurrentUser(UserAuth);
+    //   }
+    // })
   }
 
   componentWillUnmount()

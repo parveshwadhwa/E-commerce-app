@@ -81,9 +81,9 @@ const config = { // object for our project conaining all the details
   export const auth = firebase.auth(); // exporting an auth anywhere we need it
   export const firestore = firebase.firestore(); // exporting firestore also 
 
-  const provider = new firebase.auth.GoogleAuthProvider(); // gives access to googleAuth provider from auth library
-  provider.setCustomParameters({prompt: 'select_account'}); // it means we always need popup when we signin by googleAuthprovvider
-  export const SignInWithGoogle = () => auth.signInWithPopup(provider); // exporting this method for signup for popup and we can also use twitter etc.
+  export const googleProvider = new firebase.auth.GoogleAuthProvider(); // gives access to googleAuth provider from auth library
+  googleProvider.setCustomParameters({prompt: 'select_account'}); // it means we always need popup when we signin by googleAuthprovvider
+  export const SignInWithGoogle = () => auth.signInWithPopup(googleProvider); // exporting this method for signup for popup and we can also use twitter etc.
 
   export default firebase;
 
