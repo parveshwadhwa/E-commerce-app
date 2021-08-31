@@ -1,8 +1,9 @@
-import './App.css';
+import {GlobalStyle} from './global-styles';
 import React, {useEffect} from 'react';
 import HomePage from './pages/homepage/HomePage';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import ShopPage from './pages/shop/shop';
+import Contact from './pages/contact/contact';
 import Header from './components/header/header.jsx';
 import SignInSignUpPage from './pages/signup-and-signin/signup-signin';
 import {auth, CreateUserProfileDocument, addCollectionAndDocuments} from './firebase/firebase.utils';
@@ -48,15 +49,17 @@ const App = ({checkUserSession, currentUser}) => {
     })
   } */
   return (
-            <React.Fragment>
+            <div>
+              <GlobalStyle />
               <Header />
               <Switch>
               <Route exact path='/' component={HomePage} />
+              <Route exact path='/contact' component={Contact} />
               <Route  path='/shop' component={ShopPage} />
               <Route exact path='/checkout' component={CheckOutPage} />
               <Route exact path='/signin' render={() => currentUser ? (<Redirect to='/' />): (<SignInSignUpPage />)} />
               </Switch>
-            </React.Fragment>
+            </div>
   );
   
 }
