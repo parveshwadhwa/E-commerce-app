@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
+import img from '../../assets/crown.svg';
 
 const StripeCheckoutButton = ({price}) => {
     const priceforstripe = price *100;
@@ -28,7 +29,7 @@ const StripeCheckoutButton = ({price}) => {
           name='MNC Clothing Ltd.'
           billingAddress
           shippingAddress
-          image='https://svgshare.com/i/CUz.svg'
+          image={img}
           description={`Your Total Is $${price}`}
           amount={priceforstripe}
           panelLabel='Pay Now'

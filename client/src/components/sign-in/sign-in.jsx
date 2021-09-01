@@ -1,60 +1,85 @@
-import {React, useState} from 'react';
-
-import './sign-in-styles.scss';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
-import { googleSignInStart } from '../../redux/user/user-actions';
-import {emailSignInStart} from '../../redux/user/user-actions';
 
-const SignIn = ({emailSignInStart, googleSignInStart}) => {
+import {
+  googleSignInStart,
+  emailSignInStart
+} from '../../redux/user/user-actions';
 
-    const [userCredentials, setCredentials] = useState({email: '', password: ''})
-    
-    const {email, password} = userCredentials;
+import {
+  SignInContainer,
+  SignInTitle,
+  ButtonsBarContainer
+} from './sign-in.styles';
 
-    const handleSubmit = async e => {
-        e.preventDefault();
+const SignIn = ({ emailSignInStart, googleSignInStart }) => {
+  const [userCredentials, setCredentials] = useState({
+    email: '',
+    password: ''
+  });
 
-        emailSignInStart(email, password);
+  const { email, password } = userCredentials;
 
-        // try{
-        //        await auth.signInWithEmailAndPassword(email,password);
-        //        this.setState({email: '', password: ''});
-        // }catch(error)
-        // {
-        //   console.log(error);
-        // }
-    }
+  const handleSubmit = async event => {
+    event.preventDefault();
 
-    const handleChange = (e) => {
-            const {value, name} = e.target;
+    emailSignInStart(email, password);
+    alert('Signed In Succesfully');
+  };
 
-            setCredentials({ ...userCredentials, [name]: value });
-    }
+  const handleChange = event => {
+    const { value, name } = event.target;
 
-        return(
-            <div className="sign-in">
-                <h2>I already Have An Account</h2>
-                <span>Sign in With Your Email and Password</span>
+    setCredentials({ ...userCredentials, [name]: value });
+  };
 
-                <form onSubmit={handleSubmit}>
-                    <FormInput type="email" name="email" value={email} handleChange={handleChange} required label="email" />
-                    <FormInput type="password" value={password} required name="password" handleChange={handleChange} label="password" />
-                    
-                    <div className="buttons">
-                    <CustomButton type="submit" > Sign In</CustomButton>
-                    <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>{' '} Sign In With Google{' '}</CustomButton>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+  return (
+    <SignInContainer>
+      <SignInTitle>I already have an account</SignInTitle>
+      <span>Sign in with your email and password</span>
+
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          name='email'
+          type='email'
+          handleChange={handleChange}
+          value={email}
+          label='email'
+          required
+        />
+        <FormInput
+          name='password'
+          type='password'
+          value={password}
+          handleChange={handleChange}
+          label='password'
+          required
+        />
+        <ButtonsBarContainer>
+          <CustomButton type='submit'> Sign in </CustomButton>
+          <CustomButton
+            type='button'
+            onClick={googleSignInStart}
+            isGoogleSignIn
+          >
+            Sign in with Google
+          </CustomButton>
+        </ButtonsBarContainer>
+      </form>
+    </SignInContainer>
+  );
+};
 
 const mapDispatchToProps = dispatch => ({
-    googleSignInStart: () => dispatch(googleSignInStart()),
-    emailSignInStart: (email, password) => dispatch(emailSignInStart({email, password}))
-})
+  googleSignInStart: () => dispatch(googleSignInStart()),
+  emailSignInStart: (email, password) =>
+    dispatch(emailSignInStart({ email, password }))
+});
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignIn);

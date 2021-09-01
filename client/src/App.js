@@ -6,12 +6,12 @@ import ShopPage from './pages/shop/shop';
 import Contact from './pages/contact/contact';
 import Header from './components/header/header.jsx';
 import SignInSignUpPage from './pages/signup-and-signin/signup-signin';
-import {auth, CreateUserProfileDocument, addCollectionAndDocuments} from './firebase/firebase.utils';
 import {connect} from 'react-redux';
 import { selectCurrentUser } from './redux/user/user-selectors';
 import { createStructuredSelector } from 'reselect';
 import CheckOutPage from './pages/checkout/checkout';
-import {checkUserSession} from './redux/user/user-actions'
+import {checkUserSession} from './redux/user/user-actions';
+import Footer from './components/footer/footer';
 
 const App = ({checkUserSession, currentUser}) => {
 
@@ -53,12 +53,13 @@ const App = ({checkUserSession, currentUser}) => {
               <GlobalStyle />
               <Header />
               <Switch>
+              <Route exact path='/signin' render={() => currentUser ? (<Redirect to='/' />): (<SignInSignUpPage />)} />
               <Route exact path='/' component={HomePage} />
               <Route exact path='/contact' component={Contact} />
               <Route  path='/shop' component={ShopPage} />
               <Route exact path='/checkout' component={CheckOutPage} />
-              <Route exact path='/signin' render={() => currentUser ? (<Redirect to='/' />): (<SignInSignUpPage />)} />
               </Switch>
+              <Footer />
             </div>
   );
   
