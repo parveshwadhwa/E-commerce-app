@@ -1,42 +1,47 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
-
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-
+const compression = require('compression');
+const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+// Health check endpoint
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
-}
+// Stripe payment endpoint
+app.post('/payment', async (req, res) => {
+  try {
+    const { token, amount } = req.body;
 
-app.listen(port, error => {
-  if (error) throw error;
-  console.log('Server running on port ' + port);
+    const charge = await stripe.charges.create({
+      source: token.id,
+      amount,
+      currency: 'usd',
+    });
+
+    res.status(200).send({ success: charge });
+  } catch (error) {
+    console.error('Stripe Error:', error);
+    res.status(500).send({ error });
+  }
 });
 
-app.post('/payment', (req, res) => {
-  const body = {
-    source: req.body.token.id,
-    amount: req.body.amount,
-    currency: 'usd'
-  };
+// Serve React build for production
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-  stripe.charges.create(body, (stripeErr, stripeRes) => {
-    if (stripeErr) {
-      res.status(500).send({ error: stripeErr });
-    } else {
-      res.status(200).send({ success: stripeRes });
-    }
-  });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
